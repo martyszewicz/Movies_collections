@@ -5,16 +5,11 @@ import hashlib
 import binascii
 import sqlite3
 import requests, json
-import pdb
-
-
-# SQL data:
-# username: 'maciej_a_root', pass: 'Qwerty94!', database name: 'maciej_a_mysql8',
-# connection string: 'mysql://maciej_a_root:Qwerty94!@mysql.db.mdbgo.com:3306/maciej_a_mysql8'
 
 app = Flask(__name__)
 app.static_url_path = '/static'
 app.config["SECRET_KEY"] = "Something"
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 app_info = {'db_file': r'data/moviescollections.db'}
 
 def get_db():
