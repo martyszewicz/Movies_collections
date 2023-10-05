@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block body %}
+<!-- Modal -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Ten film zostanie usunięty z ulubionych</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="idDeleteModalBody">
+        ...
+      </div>
+      <div class="modal-footer">
+        <form action="" method="GET" id="confirmDeleteForm">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+            <button type="submit" class="btn btn-danger">Potwierdź</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+      $(".delete-confirm").click(function(){
+          var desc = $(this).attr('data-desc');
+          var url = $(this).attr('data-url');
+          $('#idDeleteModalBody').text(desc);
+          $('#confirmDeleteForm').attr("action", url);
+      });
+    });
+</script>
+
+<div class="container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Tytuł filmu</th>
+          <th scope="col">Opis</th>
+          <th scope="col">Adres url do platformy imdb.com</th>
+          <th scope="col">Plakat</th>
+          <th scope="col">Usuń z ulubionych</th>
+        </tr>
+      </thead>
+      <tbody>
+       {% for film in film_collection %}
+         <tr>
+             <th class="align-middle" scope="row">{{ film_collection.index(film) + 1 }}</th>
+                 <td class="align-middle">{{ film['short']['name'] }}</td>
+                 <td class="align-middle">{{ film['short']['description'] }}</td>
+                 <td class="align-middle"><a href="{{ film['short']['url'] }}" class="custom-link">
+                     {{ film['short']['url'] }}</a></td>
+                 <td>
+                     <img src="{{ film['short']['image'] }}" class="img-thumbnail rounded" width="300" height="350" alt="Brak plakatu">
+                 </td>
+                 <td class="align-middle">
+                     <a type="button" class="btn btn-danger btn-sm delete-confirm"
+                        data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+                         data-desc="{{ 'Czy na pewno usunąć film {}?'.format(film['short']['name']) }}"
+                         data-url="{{ url_for('movie_delete', movie_id=film['imdbId']) }}">
+                         Usuń
+                     </a>
+                 </td>
+         </tr>
+      {%endfor%}
+      </tbody>
+    </table>
+</div>
+
+{% endblock %}

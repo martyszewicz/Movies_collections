@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block body %}
+<!-- Modal -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Ten profil zostanie usunięty:</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="idDeleteModalBody">
+        ...
+      </div>
+      <div class="modal-footer">
+        <form action="" method="GET" id="confirmDeleteForm">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+            <button type="submit" class="btn btn-danger">Usuń</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+      $(".delete-confirm").click(function(){
+          var desc = $(this).attr('data-desc');
+          var url = $(this).attr('data-url');
+          $('#idDeleteModalBody').text(desc);
+          $('#confirmDeleteForm').attr("action", url);
+      });
+    });
+</script>
+
+<div class="container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Nazwa użytkownika</th>
+          <th scope="col">Adres email</th>
+          <th scope="col">Czy jest aktywny</th>
+          <th scope="col">Uprawnienia administratora</th>
+          <th scope="col">Akcje do wykonania</th>
+        </tr>
+      </thead>
+      <tbody>
+       {% for user in users %}
+         <tr>
+             <th scope="row">{{ user.id }}</th>
+                 <td>{{ user.name }}</td>
+                 <td>{{ user.email }}</td>
+                 <td>
+                     <a href="{{ url_for('user_status_change', action='active', user_name=user.name) }}">
+                         {% if user.is_active %}
+                            &check;
+                         {% else %}
+                            &#x25a2;
+                         {% endif %}
+                     </a>
+                 </td>
+                 <td>
+                    <a href="{{ url_for('user_status_change', action='admin', user_name=user.name) }}">
+                         {% if user.is_admin %}
+                            &check;
+                         {% else %}
+                            &#x25a2;
+                         {% endif %}
+                     </a>
+                 </td>
+                 <td>
+                     <a href="{{ url_for('edit_user', user_name = user.name) }}"
+                        class="btn btn-primary btn-sm" role="button">Edycja</a>
+                     <a type="button" class="btn btn-danger btn-sm delete-confirm"
+                        data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+                         data-desc="{{ 'Czy na pewno usunąć użytkownika {}?'.format(user.name) }}"
+                         data-url="{{ url_for('user_delete', user_name=user.name) }}">
+                         Usuń
+                     </a>
+                 </td>
+         </tr>
+      {%endfor%}
+      </tbody>
+    </table>
+</div>
+
+{% endblock %}

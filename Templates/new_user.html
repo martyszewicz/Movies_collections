@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block body %}
+
+<div class="container">
+    <div class="row mb-3">
+        <div class="col-5 h1">Rejestracja nowego użytkownika</div>
+    </div>
+    <form id="user_form" action="{{ url_for('new_user') }}" method="POST">
+
+        <div class="row mb-3">
+            <div class="col-1 col-form-label"><label for="user_name">Nazwa użytkownika</label></div>
+            <div class="col-4">
+                <input type="text" id="user_name" name="user_name" value="{{ user.user_name }}" class="form-control"><br>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-1 col-form-label"><label for="email">Adres email</label></div>
+            <div class="col-4">
+                <input type="text" id="email" name="email" value="{{ user.email }}" class="form-control"><br>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-1 col-form-label"><label for="user_pass">Hasło</label></div>
+            <div class="col-4">
+                <input type="password" id="user_pass" name="user_pass" class="form-control"><br>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-1"></div>
+            <div class="col-2"><input type="submit" value="Send" class="btn btn-primary"></div>
+        </div>
+
+    </form>
+</div>
+{% endblock %}
